@@ -15,7 +15,7 @@ void set_pixel(image im, int x, int y, int c, float v)
 {
     if (x >= 0 && x < im.w && y>=0 && y< im.w && c >=0 && c < im.c)
     {
-        im.data[im.w * y + x + im.w * im.h *c] = v;
+        im.data[im.w * y + x + im.w * im.h * c] = v;
     }
 }
 
@@ -49,12 +49,36 @@ image rgb_to_grayscale(image im)
 
 void shift_image(image im, int c, float v)
 {
-    // TODO Fill this in
+    for(int i = 0; i < im.h; ++i)
+    {
+        for(int j = 0; j < im.w; ++j)
+        {
+            im.data[im.w * i + j + im.h * im.w * c] += v;
+        }
+    }
 }
 
 void clamp_image(image im)
 {
-    // TODO Fill this in
+    int currIndex = 0;
+    for(int i = 0; i < im.h; ++i)
+    {
+        for(int j = 0; j < im.w; ++j)
+        {
+            for(int c = 0; c < im.c; ++c)
+            {
+                currIndex = im.w * i + j + im.h * im.w * c;
+                if (im.data[currIndex] > 1)
+                {
+                    im.data[currIndex] = 1;
+                }
+                else if (im.data[currIndex] < 0)
+                {
+                    im.data[currIndex] = 0;
+                }
+            }
+        }
+    }
 }
 
 
