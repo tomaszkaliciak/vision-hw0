@@ -8,21 +8,21 @@ float get_pixel(image im, int x, int y, int c)
 {
     int width = x >= 0 ? (x < im.w ? x : im.w -1) : 0;
     int height = y >= 0 ? (y < im.h ? y : im.h -1) : 0;
-    return im.data[im.w *height + width + im.w* im.h *c];
+    return im.data[im.w * height + width + im.w * im.h *c];
 }
 
 void set_pixel(image im, int x, int y, int c, float v)
 {
     if (x >= 0 && x < im.w && y>=0 && y< im.w && c >=0 && c < im.c)
     {
-        im.data[im.w *y + x + im.w* im.h *c] = v;
+        im.data[im.w * y + x + im.w * im.h *c] = v;
     }
 }
 
 image copy_image(image im)
 {
     image copy = make_image(im.w, im.h, im.c);
-    // TODO Fill this in
+    memcpy(copy.data, im.data, sizeof(float) * im.w * im.h * im.c);
     return copy;
 }
 
