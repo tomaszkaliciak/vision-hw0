@@ -30,7 +30,20 @@ image rgb_to_grayscale(image im)
 {
     assert(im.c == 3);
     image gray = make_image(im.w, im.h, 1);
-    // TODO Fill this in
+
+    int currIndex = 0;
+
+    for(int i = 0; i < im.h; ++i)
+    {
+        for(int j = 0; j < im.w; ++j)
+        {
+            currIndex = im.w * i + j;
+            gray.data[currIndex] = 
+                0.299 * im.data[currIndex] +
+                0.587 * im.data[currIndex + im.h * im.w * 1]  +
+                0.114 * im.data[currIndex + im.h * im.w * 2]; 
+        }
+    }
     return gray;
 }
 
