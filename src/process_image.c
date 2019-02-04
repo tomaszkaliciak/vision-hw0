@@ -13,7 +13,10 @@ float get_pixel(image im, int x, int y, int c)
 
 void set_pixel(image im, int x, int y, int c, float v)
 {
-    return;
+    if (x >= 0 && x < im.w && y>=0 && y< im.w && c >=0 && c < im.c)
+    {
+        im.data[im.w *y + x + im.w* im.h *c] = v;
+    }
 }
 
 image copy_image(image im)
