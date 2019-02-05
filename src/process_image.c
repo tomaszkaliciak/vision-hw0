@@ -3,7 +3,7 @@
 #include <assert.h>
 #include <math.h>
 #include "image.h"
-#include <math.h>
+#include <stdlib.h>
 
 float get_pixel(image im, int x, int y, int c)
 {
@@ -170,5 +170,79 @@ void rgb_to_hsv(image im)
 
 void hsv_to_rgb(image im)
 {
-    // TODO Fill this in
+    int currIndex = 0;
+
+    float h_prim = 0;
+    float x = 0;
+    float c = 0;
+    float m = 0;
+
+    float h = 0;
+    float s = 0;
+    float v = 0;
+
+    float r = 0;
+    float g = 0;
+    float b = 0;
+
+    for(int i = 0; i < im.h; ++i)
+    {
+        for(int j = 0; j < im.w; ++j)
+        {
+            currIndex = im.w * i + j;
+            h = im.data[currIndex];
+            s = im.data[currIndex + im.w * im.h];
+            v = im.data[currIndex + im.w * im.h * 2];
+
+            c = v * s;
+            h_prim = h * 6;
+            x = c * (1 - fabs(fmod(h_prim, 2) -1));
+
+            if (h_prim >= 0 && h_prim < 1)
+            {
+                r = c;
+                g = x;
+                b = 0;
+            }
+            else if (h_prim >= 1 && h_prim < 2)
+            {
+                r = x;
+                g = c;
+                b = 0;
+            }
+            else if (h_prim >= 2 && h_prim < 3)
+            {
+                r = 0;
+                g = c;
+                b = x;
+            }
+            else if (h_prim >= 3 && h_prim < 4)
+            {
+                r = 0;
+                g = x;
+                b = c;
+            }
+            else if (h_prim >= 4 && h_prim < 5)
+            {
+                r = x;
+                g = 0;
+                b = c;
+            }
+            else if (h_prim >= 5 && h_prim < 6)
+            {
+                r = c;
+                g = 0;
+                b = x;
+            }
+
+            m = v - c;
+            r += m;
+            g += m;
+            b += m;
+
+            set_pixel(im, j, i, 0, r);
+            set_pixel(im, j, i, 1, g);
+            set_pixel(im, j, i, 2, b);
+        }
+    }
 }
