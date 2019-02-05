@@ -59,6 +59,17 @@ void shift_image(image im, int c, float v)
     }
 }
 
+void scale_image(image im, int c, float v)
+{
+    for(int i = 0; i < im.h; ++i)
+    {
+        for(int j = 0; j < im.w; ++j)
+        {
+            im.data[im.w * i + j + im.h * im.w * c] *= v;
+        }
+    }
+}
+
 void clamp_image(image im)
 {
     int currIndex = 0;
@@ -82,8 +93,6 @@ void clamp_image(image im)
     }
 }
 
-
-// These might be handy
 float three_way_max(float a, float b, float c)
 {
     return (a > b) ? ( (a > c) ? a : c) : ( (b > c) ? b : c) ;
@@ -96,6 +105,8 @@ float three_way_min(float a, float b, float c)
 
 void rgb_to_hsv(image im)
 {
+    assert(im.c == 3);
+
     int currIndex = 0;
     float v = 0;
     float m = 0;
