@@ -3,6 +3,7 @@
 #include <assert.h>
 #include <math.h>
 #include "image.h"
+#include <math.h>
 
 float get_pixel(image im, int x, int y, int c)
 {
@@ -95,7 +96,76 @@ float three_way_min(float a, float b, float c)
 
 void rgb_to_hsv(image im)
 {
-    // TODO Fill this in
+    int currIndex = 0;
+    float v = 0;
+    float m = 0;
+    float c = 0;
+    float s = 0;
+    float h_prim = 0;
+    float h = 0;
+
+    for(int i = 0; i < im.h; ++i)
+    {
+        for(int j = 0; j < im.w; ++j)
+        {
+            currIndex = im.w * i + j;
+
+            v = three_way_max(
+                im.data[currIndex],
+                im.data[currIndex + im.h * im.w],
+                im.data[currIndex + im.h * im.w * 2]
+            );
+
+            m = three_way_min(
+                im.data[currIndex],
+                im.data[currIndex + im.h * im.w],
+                im.data[currIndex + im.h * im.w * 2]
+            );
+
+            if (v == m)
+            {
+                s = 0;
+                h = 0;
+            }
+            else 
+            {
+                c = v - m;
+                s = c/v;
+
+                if (v == im.data[currIndex])
+                {
+                    h_prim = im.data[currIndex + im.h * im.w] -
+                        im.data[currIndex + im.h * im.w * 2];
+                    h_prim /= c;
+                }
+                else if (v == im.data[currIndex + im.h * im.w])
+                {
+                    h_prim = im.data[currIndex + im.h * im.w * 2] -
+                        im.data[currIndex];
+                    h_prim /= c;
+                    h_prim += 2;
+                }
+                else
+                {
+                    h_prim = im.data[currIndex] - im.data[currIndex + im.h * im.w];
+                    h_prim /= c;
+                    h_prim += 4;
+                }
+                
+                if (h_prim < 0)
+                {
+                    h = (h_prim / 6) + 1;
+                }
+                else
+                {
+                    h = h_prim / 6;
+                }
+            }
+                set_pixel(im, j, i, 0, h);
+                set_pixel(im, j, i, 1, s);
+                set_pixel(im, j, i, 2, v);
+        }
+    }
 }
 
 void hsv_to_rgb(image im)
